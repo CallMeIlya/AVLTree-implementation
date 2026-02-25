@@ -186,9 +186,12 @@ class AVLTree {
           root->right = Delete(root->right, min);
         }
         }
+        
+        /*
         if(!root) {
           return root;
         }
+
         root->height = max(Height(root->left), Height(root->right))+1;
 
         //calc balance
@@ -214,8 +217,7 @@ class AVLTree {
           return LeftRotate(root);
         }
 
-
-        //this case should in theory never happen
+        */
         return root;
     }
 

@@ -50,7 +50,7 @@ class AVLTree {
         return;
       }
       InorderPrint(root->left);
-      std::cout << (root->num) << " ";
+      std::cout << (root->num) << " " << root->height << "|";
       InorderPrint(root->right);
     }
 
@@ -152,6 +152,7 @@ class AVLTree {
           return LeftRotate(root);
         }
 
+        //root->height = max(Height(root->left), Height(root->right))+1;
         return root;
     }
 
@@ -169,6 +170,7 @@ class AVLTree {
 
         //if no children
         if(root->left == nullptr && root->right == nullptr) {
+          delete root;
           return nullptr;
         }
 
@@ -187,7 +189,7 @@ class AVLTree {
         }
         }
         
-        /*
+        
         if(!root) {
           return root;
         }
@@ -197,28 +199,28 @@ class AVLTree {
         //calc balance
         int balance = GetBalance(root);
         
-        //left left case
-        if(balance > 1 && _num < root->left->num) {
-          return RightRotate(root);
+        if(balance > 1) {
+          //left-left case
+          if(GetBalance(root->left) >= 0) {
+            return RightRotate(root);
+          } else {
+          //left-right case
+            root->left = LeftRotate(root->left);
+            return RightRotate(root);
+          }
         }
-        //right right case
-        if(balance < -1 && _num > root->right->num) {
-          return LeftRotate(root);
+        if(balance < -1) {
+          //right-right case
+          if(GetBalance(root->right) <= 0) {
+            return LeftRotate(root);
+          } else {
+          //right-left case
+            root->right = RightRotate(root->right);
+            return LeftRotate(root);
+          }
         }
-
-        //left right case
-        if(balance > 1 && _num > root->left->num) {
-          root->left = LeftRotate(root->left);
-          return RightRotate(root);
-        }
-        //right left case
-        if(balance < -1 && _num < root->right->num) {
-          root->right = RightRotate(root->right);
-          return LeftRotate(root);
-        }
-
-        */
-        return root;
+        //root->height = max(Height(root->left), Height(root->right))+1;
+        return root;       
     }
 
     int max(int a, int b) {
@@ -237,10 +239,15 @@ int main() {
   tree->Root = tree->Insert(tree->Root, 3);
   tree->Root = tree->Insert(tree->Root, 7);
 
+  /*
   tree->Delete(tree->Root, 14);
   tree->Delete(tree->Root, 16);
   tree->Delete(tree->Root, 6);
-  //tree->InorderPrint(tree->Root);
+  */
+  tree->InorderPrint(tree->Root);
+        
+  std::cout << std::endl << "--------------------------" << std::endl;
+
   tree->LevelOrderTraversal(tree->Root);
   std::cout << std::endl;
 }
